@@ -45,7 +45,7 @@ export function useWebSocket(tokenIds: string[]) {
       }, 3000)
     }
 
-    wsRef.current = mockWebSocket as unknown as WebSocket
+    wsRef.current = mockWebSocket as any
   }, [tokenIds, dispatch])
 
   const disconnect = useCallback(() => {
@@ -100,8 +100,8 @@ function createMockWebSocket(
         clearInterval(intervalId)
         intervalId = null
       }
-      isOpen = false
-      mockWs.readyState = WebSocket.CLOSED
+      isOpen = false,
+      (mockWs as any).readyState = WebSocket.CLOSED
       if (mockWs.onclose) {
         mockWs.onclose()
       }
@@ -110,8 +110,8 @@ function createMockWebSocket(
 
   // Simulate connection opening
   setTimeout(() => {
-    isOpen = true
-    mockWs.readyState = WebSocket.OPEN
+    isOpen = true,
+    (mockWs as any).readyState = WebSocket.CLOSED
     if (mockWs.onopen) {
       mockWs.onopen()
     }
